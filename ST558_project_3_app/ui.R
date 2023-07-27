@@ -14,6 +14,10 @@ library(DT)
 library(ggplot2)
 library(shinydashboard)
 
+abalone <- read.csv("abalone.data") %>% as_tibble 
+
+colnames(abalone) <- c("Sex", "Length(mm)", "Diameter(mm)", "Height(mm)", "Whole weight(g)", "Shucked weight(g)", "Viscera weight(g)",  "Shell weight(g)", "Rings" )
+
 
 dashboardPage(
     ## adds title 
@@ -34,7 +38,7 @@ dashboardPage(
                 fluidPage(
                   titlePanel("About the App"), 
                   mainPanel(
-                    h4("this is where the info about the app will go. it is about using tumor charecteristics to diagnost breast tumors as benign or malignant")
+                    h4("this is where the info about the app will go. it is about using measurements of abalone to predict age")
                             )
                           )
                 ), 

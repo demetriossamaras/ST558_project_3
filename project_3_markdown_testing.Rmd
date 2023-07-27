@@ -22,11 +22,20 @@ library(shinydashboard)
 ```
 
 
-```{r read data }
+```{r read cancer data }
 
 cancer<- read.csv("wdbc.data") %>% as_tibble()
 
 colnames(cancer)<- c("ID", "Diagnosis", "mean radius", "mean texture", "mean perimeter", "mean area", "mean smoothness", "mean compactness", "mean concavity", "mean concave points", "mean symmetry", "mean fractal dimension", "radius SE", "texture SE", "perimeter SE", "area SE", "smoothness SE", "compactness SE", "concavity SE", "concave points SE", "symmetry SE", "fractal dimension SE", "worst radius", "worst texture", "worst perimeter", "worst area", "worst smoothness", "worst compactness", "worst concavity", "worst concave points", "worst symmetry", "worst fractal dimension" )
 
 ```
+
+```{r read abalone data }
+
+abalone <- read.csv("abalone.data") %>% as_tibble 
+
+colnames(abalone) <- c("Sex", "Length(mm)", "Diameter(mm)", "Height(mm)", "Whole weight(g)", "Shucked weight(g)", "Viscera weight(g)",  "Shell weight(g)", "Rings" )
+
+```
+
 
