@@ -1,0 +1,32 @@
+---
+title: "project_3_markdown_testing"
+author: "Demetrios Samaras"
+date: "2023-07-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, message = FALSE)
+```
+
+
+```{r library}
+library(shiny)
+library(tidyverse)
+library(caret)
+library(DT)
+library(ggplot2)
+library(shinydashboard)
+
+
+```
+
+
+```{r read data }
+
+cancer<- read.csv("wdbc.data") %>% as_tibble()
+
+colnames(cancer)<- c("ID", "Diagnosis", "mean radius", "mean texture", "mean perimeter", "mean area", "mean smoothness", "mean compactness", "mean concavity", "mean concave points", "mean symmetry", "mean fractal dimension", "radius SE", "texture SE", "perimeter SE", "area SE", "smoothness SE", "compactness SE", "concavity SE", "concave points SE", "symmetry SE", "fractal dimension SE", "worst radius", "worst texture", "worst perimeter", "worst area", "worst smoothness", "worst compactness", "worst concavity", "worst concave points", "worst symmetry", "worst fractal dimension" )
+
+```
+

@@ -8,26 +8,77 @@
 #
 
 library(shiny)
+library(tidyverse)
+library(caret)
+library(DT)
+library(ggplot2)
+library(shinydashboard)
 
-# Define UI for application that draws a histogram
-fluidPage(
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("distPlot")
-        )
-    )
+dashboardPage(
+    ## adds title 
+    dashboardHeader(title = "Cancer Diagnosis App"),
+    ## adds tabs 
+    dashboardSidebar(sidebarMenu(
+      menuItem("About", tabName = "about"),
+      menuItem("Exploration", tabName = "explore"),
+      menuItem("Modeling", tabName = "modeling"),
+      menuItem("Data", tabName = "data")
+                      )          ),
+    ## adds body of tabs
+    dashboardBody(
+      ## attached to set tabs 
+      tabItems(
+        ## fills the specific tab with code 
+        tabItem("about", 
+                fluidPage(
+                  titlePanel("About the App"), 
+                  mainPanel(
+                    h4("this is where the info about the app will go. it is about using tumor charecteristics to diagnost breast tumors as benign or malignant")
+                            )
+                          )
+                ), 
+        tabItem("explore", 
+                fluidPage(
+                  titlePanel("Data Exploration"), 
+                  sidebarLayout(
+                    sidebarPanel(h4("widgets for eda will go here")),
+                  mainPanel(h4("output and graphs for eda will go here")
+                            )
+                                )
+                         )
+                ), 
+        tabItem("modeling", 
+                fluidPage(
+                  titlePanel("Supervised Learning Models"),
+                  tabsetPanel(
+                  tabPanel("Modeling Info",
+                             mainPanel(h4("mathjax and explan 3 models"))
+                           ),
+                  tabPanel("Model Fitting",
+                           sidebarLayout(
+                             sidebarPanel(h4("widgets for model fitting")), 
+                             mainPanel(h4("model fitting output info"))
+                                         )
+                           ), 
+                  tabPanel("Prediction",
+                           sidebarLayout(
+                             sidebarPanel(h4("widgets for prediction")), 
+                             mainPanel(h4("output for prediction"))  
+                                         )
+                           )
+                              )
+                          )
+                ), 
+        tabItem("data",
+                fluidPage(
+                  titlePanel("The Dataset"), 
+                  sidebarLayout(
+                    sidebarPanel(h4("widgets for subsetting data")), 
+                    mainPanel(h4("all the data in a table that can be scrolled through"))
+                                )
+                         )
+                )
+              )
+                 )
 )
