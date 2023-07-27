@@ -32,10 +32,25 @@ colnames(cancer)<- c("ID", "Diagnosis", "mean radius", "mean texture", "mean per
 
 ```{r read abalone data }
 
-abalone <- read.csv("abalone.data") %>% as_tibble 
+abalone <- read.csv("ST558_project_3_app/abalone.data") %>% as_tibble 
 
-colnames(abalone) <- c("Sex", "Length(mm)", "Diameter(mm)", "Height(mm)", "Whole weight(g)", "Shucked weight(g)", "Viscera weight(g)",  "Shell weight(g)", "Rings" )
+colnames(abalone) <- c("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
 
 ```
+
+```{r}
+
+g <- ggplot(data=abalone, aes(x= Whole_weight, y=Rings))
+g+ geom_point(aes(color= Sex)) + geom_smooth(method = "lm") + ggtitle("scatterplot")
+
+```
+
+```{r}
+
+h <- ggplot(data = abalone, aes(x= Sex, y= Rings))
+h+ geom_boxplot(aes(color=Sex))
+```
+
+
 
 

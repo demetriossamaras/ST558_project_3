@@ -16,7 +16,7 @@ library(shinydashboard)
 
 abalone <- read.csv("abalone.data") %>% as_tibble 
 
-colnames(abalone) <- c("Sex", "Length(mm)", "Diameter(mm)", "Height(mm)", "Whole weight(g)", "Shucked weight(g)", "Viscera weight(g)",  "Shell weight(g)", "Rings" )
+colnames(abalone) <- c("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
 
 
 dashboardPage(
@@ -46,8 +46,27 @@ dashboardPage(
                 fluidPage(
                   titlePanel("Data Exploration"), 
                   sidebarLayout(
-                    sidebarPanel(h4("widgets for eda will go here")),
-                  mainPanel(h4("output and graphs for eda will go here")
+                    sidebarPanel(
+                      h4("Select the type of summary"), 
+                      ## set up widget to select summay 
+                      selectInput("norg", label = "Summary type", choices = list("Numeric", "Graphical")     ), 
+                      ## conditional panels based on summary input 
+                      conditionalPanel(condition = "input.norg == 'Numeric'",                             selectInput("var1", label = "Variable to summarize", choices = list("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
+                                          )
+                                       ),
+                      conditionalPanel(condition= "input.norg == 'Graphical'",                  selectInput("graph1", label="Type of graph", choices = list ("Scatterplot", "Boxplot" )
+                                           )
+                                        ),
+                      conditionalPanel(condition= "input.norg == 'Graphical' & input.graph1 == 'Scatterplot'",                                                              selectInput("respvar", label="Response variable", list("Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
+                                            ), 
+                                selectInput("explanvar", label="Explanatory variable", list("Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
+                                            )
+                                       )
+                                ),
+                      
+                  mainPanel(
+                    h4("Output and graphs for EDA"), 
+                    plotOutput("plot1")
                             )
                                 )
                          )
