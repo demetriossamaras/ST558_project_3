@@ -50,23 +50,31 @@ dashboardPage(
                       h4("Select the type of summary"), 
                       ## set up widget to select summay 
                       selectInput("norg", label = "Summary type", choices = list("Numeric", "Graphical")     ), 
+                      h4("Select desired rows"), 
+                      sliderInput("range", label="Desired rows",value=c(1,4176), min=1, max=4176, step=1
+                                  ),
                       ## conditional panels based on summary input 
                       conditionalPanel(condition = "input.norg == 'Numeric'",                             selectInput("var1", label = "Variable to summarize", choices = list("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
                                           )
                                        ),
+                      ## condition panel to choose graph
                       conditionalPanel(condition= "input.norg == 'Graphical'",                  selectInput("graph1", label="Type of graph", choices = list ("Scatterplot", "Boxplot" )
                                            )
                                         ),
-                      conditionalPanel(condition= "input.norg == 'Graphical' & input.graph1 == 'Scatterplot'",                                                              selectInput("respvar", label="Response variable", list("Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
+                      ## condition panel to choose variables based on graph
+                      conditionalPanel(condition= "input.norg == 'Graphical' & input.graph1 == 'Scatterplot'",                                                              selectInput("respvar", label="Response variable", list("Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" ), selected = "Rings"
                                             ), 
-                                selectInput("explanvar", label="Explanatory variable", list("Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
+                                selectInput("explanvar", label="Explanatory variable", list("Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" ), selected = "Legth"
                                             )
                                        )
                                 ),
                       
                   mainPanel(
-                    h4("Output and graphs for EDA"), 
+                    h4("Numeric summaries and graphs for EDA"),
+                    uiOutput("select"),
+                    verbatimTextOutput("numericSum"), 
                     plotOutput("plot1")
+                    
                             )
                                 )
                          )
@@ -80,8 +88,12 @@ dashboardPage(
                            ),
                   tabPanel("Model Fitting",
                            sidebarLayout(
-                             sidebarPanel(h4("widgets for model fitting")), 
-                             mainPanel(h4("model fitting output info"))
+                             sidebarPanel(
+                               h4("Select model type"), 
+                               selectInput("model1", list())
+                                          ), 
+                             mainPanel(h4("model fitting output info")
+                                       )
                                          )
                            ), 
                   tabPanel("Prediction",
