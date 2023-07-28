@@ -13,6 +13,7 @@ library(caret)
 library(DT)
 library(ggplot2)
 library(shinydashboard)
+library(tree)
 
 abalone <- read.csv("abalone.data") %>% as_tibble 
 
@@ -89,10 +90,32 @@ dashboardPage(
                   tabPanel("Model Fitting",
                            sidebarLayout(
                              sidebarPanel(
-                               h4("Select model type"), 
-                               selectInput("model1", list())
+                               h4("Input desired predictors for each model, Rings is the response variable of interest"),
+                               h5("For example, if you only want to look at only length as a predictor put 'Length' and if you want to use all predictors put ' . ' do not include quotes. After inputting desired predictors check the box at the bottom. Please be patient as the random forest will take a long time to run."), 
+                               textInput("multiL1", label = "Multiple linear regression", value = "Length + Whole_weight"), 
+                               textInput("regtree1", label = "Regression tree", value = "Length + Whole_weight"), 
+                               textInput("randomf1", label = "Random forest", value = "Length + Whole_weight"),
+                               h5("select mtry value for random forest, must be equal to or less than number of predictors"),
+                               numericInput("mtry1", label = "M = ", value = 2, min=1, max=8, step=1
+                               ), 
+                               h5("select size of training data set, test set will be 1- training set"), 
+                               numericInput("trainsize", label = "Training set size(.5-.95)", value= .7, min=.5, max= .95, step = .05),
+                               checkboxInput("check1", label = "Check when ready", value = FALSE)
+                               
                                           ), 
-                             mainPanel(h4("model fitting output info")
+                             mainPanel(h4("Model fitting output info"),
+                                       h5("Linear model training"), 
+                                       verbatimTextOutput("multiL2"),
+                                       h5("Linear model test set"),
+                                       verbatimTextOutput("multiL3"),
+                                       h5("regression tree training"), 
+                                       plotOutput("regtree2"),
+                                       h5("Regression tree test set"),
+                                       verbatimTextOutput("regtree3"),
+                                       h5("Random forest training"),
+                                       plotOutput("randomf2"), 
+                                       h5("Random forest test set "), 
+                                       verbatimTextOutput("randomf3")
                                        )
                                          )
                            ), 
