@@ -14,6 +14,7 @@ library(DT)
 library(ggplot2)
 library(shinydashboard)
 library(tree)
+library(randomForest)
 
 abalone <- read.csv("abalone.data") %>% as_tibble 
 
@@ -76,6 +77,14 @@ function(input, output, session) {
       
   })
     
+    output$lmRMSE <- renderPrint({
+      if(input$check1){
+        lmModel <-linear1()
+        lmModel$results$RMSE
+      }
+      
+    })
+    
     output$multiL2 <- renderPrint({
       if(input$check1){
         summary(linear1())
@@ -107,16 +116,29 @@ function(input, output, session) {
         abalone_test <- abalone[test, ]
         
         treemodel1 <- reformulate(input$regtree1, response = "Rings")
-        tree_model_1 <- tree(treemodel1, data = abalone_train)
+        tree_model_1 <- train(treemodel1, 
+                              data = abalone_train,
+                              method = "rpart",
+                              preProcess = c("center", "scale"),
+                              trControl = trainControl(method = "cv", number = 5))
         
         tree_model_1
         
       }
     })
+    output$regRMSE <- renderPrint({
+      if(input$check1){
+        treeModel <-tree1()
+        treeModel$results$RMSE
+      }
+      
+    })
+    
    output$regtree2<- renderPlot({
      if(input$check1){
-     plot(tree1())
-     text(tree1())
+     treeModel <-tree1() 
+     plot(treeModel$finalModel)
+     text(treeModel$finalModel)
      }
    })
     
@@ -151,9 +173,17 @@ function(input, output, session) {
       }
     })
     
+    output$rfRMSE <- renderPrint({
+      if(input$check1){
+        rfModel <-forest1()
+        rfModel$results$RMSE
+      }
+      
+    })
+    
     output$randomf2 <- renderPlot({
       if(input$check1){
-        plot(forest1())
+        varImp(forest1()) %>% plot()
       }
     })
     
@@ -166,6 +196,44 @@ function(input, output, session) {
         
         rf_1_RMSE
      }
+    })
+    
+    output$pred1 <- renderPrint({
+      if(input$check1 & input$modelSelect=="Linear model"){
+        data1 <- data.frame(!!sym(input$pred))
+        data1
+        #prediction1 <- predict(linear1(), newdata= data1)
+        #prediction1
+        
+      }else if(input$check1 & input$modelSelect=="Tree model"){
+        
+      }else if(input$check1 & input$modelSelect=="Random forest model"){
+        
+      }
+      
+    })
+    
+    output$dataTable <- renderDataTable({
+      ## creates a data table for the abalone data set
+      datatable(abalone,
+                ## sets options 
+                options = list(paging = TRUE,    
+                               pageLength = 50, 
+                               scrollX = TRUE,  
+                               scrollY = TRUE,
+                               autoWidth = TRUE, 
+                               server = TRUE,   
+                               dom = 'Bfrtip',
+                               buttons = c('csv'),
+                               columnDefs = list(list(targets = '_all', className = 'dt-center'))
+                ),
+                ## allows visible data to be saved with server=TRUE
+                extensions = 'Buttons',
+                selection = 'multiple',
+                filter = 'top',              
+                rownames = TRUE              
+      )
+      
     })
     
     

@@ -17,7 +17,7 @@ library(caret)
 library(DT)
 library(ggplot2)
 library(shinydashboard)
-
+library(randomForest)
 
 ```
 
@@ -50,6 +50,27 @@ g+ geom_point(aes(color= Sex)) + geom_smooth(method = "lm") + ggtitle("scatterpl
 h <- ggplot(data = abalone, aes(x= Sex, y= Rings))
 h+ geom_boxplot(aes(color=Sex))
 ```
+
+```{r}
+
+set.seed(13) 
+        train <- sample(1:nrow(abalone), size = nrow(abalone)*.7)
+        test <- setdiff(1:nrow(abalone), train)
+        
+        # training and testing subsets
+        abalone_train <- abalone[train, ]
+        abalone_test <- abalone[test, ]
+        
+        linear_model_1 <- train(Rings ~ Length + Diameter , 
+                                data = abalone_train,
+                                 method = "lm",
+                                 preProcess = c("center", "scale"),
+                                 trControl = trainControl(method = "cv", 
+                                                          number = 5))
+
+        predict(linear_model_1, newdata = data.frame("Length"=.665,"Diameter"=.525, "Sex"=NULL))
+```
+
 
 
 
