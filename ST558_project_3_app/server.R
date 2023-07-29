@@ -59,7 +59,7 @@ function(input, output, session) {
       if(input$check1){
        set.seed(13) 
         train <- sample(1:nrow(abalone), size = nrow(abalone)*input$trainsize )
-        test <- setdiff(1:nrow(abalone), train)
+        test <- dplyr::setdiff(1:nrow(abalone), train)
         
         # training and testing subsets
         abalone_train <- abalone[train, ]
@@ -94,6 +94,13 @@ function(input, output, session) {
     
     output$multiL3 <- renderPrint({
       if(input$check1){
+        set.seed(13) 
+        train <- sample(1:nrow(abalone), size = nrow(abalone)*input$trainsize )
+        test <- dplyr::setdiff(1:nrow(abalone), train)
+        
+        # training and testing subsets
+        abalone_train <- abalone[train, ]
+        abalone_test <- abalone[test, ]
       ##prediction of model on test 
       linear_model_1_pred <- predict(linear1(), newdata = dplyr::select(abalone_test, -Rings))
       
@@ -109,7 +116,7 @@ function(input, output, session) {
       if(input$check1){
         set.seed(13) 
         train <- sample(1:nrow(abalone), size = nrow(abalone)*input$trainsize )
-        test <- setdiff(1:nrow(abalone), train)
+        test <- dplyr::setdiff(1:nrow(abalone), train)
         
         # training and testing subsets
         abalone_train <- abalone[train, ]
@@ -144,6 +151,13 @@ function(input, output, session) {
     
     output$regtree3 <- renderPrint({
       if(input$check1){
+        set.seed(13) 
+        train <- sample(1:nrow(abalone), size = nrow(abalone)*input$trainsize )
+        test <- dplyr::setdiff(1:nrow(abalone), train)
+        
+        # training and testing subsets
+        abalone_train <- abalone[train, ]
+        abalone_test <- abalone[test, ]
       tree_model_1_pred <- predict(tree1(), newdata = dplyr::select(abalone_test, -Rings))
       ## storing error of model on test set 
       tree_1_RMSE<- postResample(tree_model_1_pred, obs = abalone_test$Rings)
@@ -156,7 +170,7 @@ function(input, output, session) {
       if(input$check1){
         set.seed(13) 
         train <- sample(1:nrow(abalone), size = nrow(abalone)*input$trainsize )
-        test <- setdiff(1:nrow(abalone), train)
+        test <- dplyr::setdiff(1:nrow(abalone), train)
         
         # training and testing subsets
         abalone_train <- abalone[train, ]
@@ -189,6 +203,13 @@ function(input, output, session) {
     
     output$randomf3 <- renderPrint({
       if(input$check1){
+        set.seed(13) 
+        train <- sample(1:nrow(abalone), size = nrow(abalone)*input$trainsize )
+        test <- dplyr::setdiff(1:nrow(abalone), train)
+        
+        # training and testing subsets
+        abalone_train <- abalone[train, ]
+        abalone_test <- abalone[test, ]
         rf_model_1_pred <- predict(forest1(), newdata = dplyr::select(abalone_test, -Rings))
         
         ## storing error of model on test set 
@@ -197,13 +218,17 @@ function(input, output, session) {
         rf_1_RMSE
      }
     })
-    
+    ## makes prediction based on inputted values 
     output$pred1 <- renderPrint({
       if(input$check1 & input$modelSelect=="Linear model"){
-        data1 <- data.frame(!!sym(input$pred))
-        data1
-        #prediction1 <- predict(linear1(), newdata= data1)
-        #prediction1
+        ## makes a names vector based on predictors input
+        names<- unlist(strsplit(input$predP, ",")) %>% c()
+        ## makes a values dataframe based on predictor values given
+        values<- unlist(strsplit(input$predN, ",")) %>% as.numeric()
+        names(values)<- names
+        values <- data.frame(t(values))
+        prediction1 <- predict(linear1(), newdata= values)
+        prediction1
         
       }else if(input$check1 & input$modelSelect=="Tree model"){
         

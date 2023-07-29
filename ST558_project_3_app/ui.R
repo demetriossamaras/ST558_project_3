@@ -132,7 +132,8 @@ dashboardPage(
                                h4("Choose desired model for prediction"), 
                                h5("NOTE: You must have already run the models on the Model Fitting tab and the checkbox must be pressed"),
                                selectInput("modelSelect", label = "Model", choices = list("Linear model", "Tree model", "Random forest model")), 
-                               textInput("pred", label = "Input prediction values. Must include a value for each predictor selected for the desired model on the Model Fitting tab and a comma seperating each predictor", value = "Length= .33, Whole_weight=.205")
+                               textInput("predP", label = "Input predictors used for the desired model. Must be seperated by a comma and have no spaces", value = "Length, Whole_weight"), 
+                               textInput("predN", label= "Input values for predictors in same order. Must be seperated by a comma", value = "0.5,0.4")
                                           ), 
                              mainPanel(
                                h4("output for prediction"),
