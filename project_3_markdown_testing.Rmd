@@ -19,6 +19,7 @@ library(ggplot2)
 library(shinydashboard)
 library(randomForest)
 
+
 ```
 
 
@@ -70,6 +71,14 @@ set.seed(13)
 
 predict(linear_model_1, newdata = data.frame(length=.665,diameter=.525))
 ```
+
+```{r}
+
+g <- ggplot(data=abalone, aes(x= Whole_weight))
+g+ geom_histogram(binwidth= .01, color="red", fill="blue", ) + ggtitle("Histogram")
+
+```
+
 
 
 

@@ -16,6 +16,7 @@ library(shinydashboard)
 library(tree)
 library(randomForest)
 
+
 abalone <- read.csv("abalone.data") %>% as_tibble 
 
 colnames(abalone) <- c("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
@@ -57,7 +58,7 @@ dashboardPage(
                       h4("Select the type of summary"), 
                       ## set up widget to select summay 
                       selectInput("norg", label = "Summary type", choices = list("Numeric", "Graphical")     ), 
-                      h4("Select desired rows"), 
+                      h4("Choose rows of interest"), 
                       sliderInput("range", label="Desired rows",value=c(1,4176), min=1, max=4176, step=1
                                   ),
                       ## conditional panels based on summary input 
@@ -65,7 +66,7 @@ dashboardPage(
                                           )
                                        ),
                       ## condition panel to choose graph
-                      conditionalPanel(condition= "input.norg == 'Graphical'",                  selectInput("graph1", label="Type of graph", choices = list ("Scatterplot", "Boxplot" )
+                      conditionalPanel(condition= "input.norg == 'Graphical'",                  selectInput("graph1", label="Type of graph", choices = list ("Scatterplot", "Boxplot", "Histogram" )
                                            )
                                         ),
                       ## condition panel to choose variables based on graph
@@ -73,7 +74,10 @@ dashboardPage(
                                             ), 
                                 selectInput("explanvar", label="Explanatory variable", list("Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" ), selected = "Legth"
                                             )
-                                       )
+                                       ), 
+                                conditionalPanel(condition= "input.norg == 'Graphical' & input.graph1 == 'Histogram'",                                                              selectInput("hisvar", label="Variable of interest", list("Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" ), selected = "Rings"
+                                          )
+                                               )
                                 ),
                       
                   mainPanel(
@@ -88,10 +92,18 @@ dashboardPage(
                 ), 
         tabItem("modeling", 
                 fluidPage(
+                  withMathJax(), 
                   titlePanel("Supervised Learning Models"),
                   tabsetPanel(
                   tabPanel("Modeling Info",
-                             mainPanel(h4("mathjax and explan 3 models"))
+                             mainPanel(
+                               h4("Linear Regression Model"), 
+                               h5(" A linear regression model will generate a line of best fit that relates the response variable to the predictors with the general form of .  The main benefits of linear regression is that it is easy to use and interpret results from, it can also be extended to include interaction terms and quadratics with relative ease, and we can easily understand the influence that each predictor term had on the model. The main drawbacks of linear regression is that it is sensative to outliers and assumes that there is some kind of linear relationship which may not always be the case. "), 
+                               h4("Regression Tree Model"),
+                               h5("A regression tree is a type of decision tree that will split up the predictor space into a number a regions and give differnt predictions based on the region. The main benefits of a regression tree are that the method is quick and the model created can be easily interpreted and understood. The main disadvantages are that they are vulnerable to overfitting which can be minimized by using pruning and they can have trouble using continous variables"), 
+                               h4("Random Forest Model"), 
+                               h5("A random forest model is an ensamble based method that generates a large number of decision trees using bootstraped samples of the data set and a random selection of predictors (# of predictors is mtry) and then combines these trees to form the model. The biggest advantages are that you should have better predictability based on a better fit to the data and decreased variability because of the large number of trees being grown. The main disadvantages of this model is that you lose interpretability because it is a combination of a large number of trees, and that this model takes alot of computation and time to be generated.")
+                                       )
                            ),
                   tabPanel("Model Fitting",
                            sidebarLayout(

@@ -16,6 +16,7 @@ library(shinydashboard)
 library(tree)
 library(randomForest)
 
+
 abalone <- read.csv("abalone.data") %>% as_tibble 
 
 colnames(abalone) <- c("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
@@ -46,10 +47,13 @@ function(input, output, session) {
       abalone1 <- abalone[input$range[1]:input$range[2],]
       if(input$norg == "Graphical" & input$graph1 == "Scatterplot"){
         g <- ggplot(data=abalone1, aes(x= !!sym(input$explanvar ), y=!!sym(input$respvar )))
-        g+ geom_point(aes(color= Sex)) + geom_smooth(method = "lm") + ggtitle("scatterplot")
+        g+ geom_point(aes(color= Sex)) + geom_smooth(method = "lm") + ggtitle("Scatterplot")
       } else if(input$norg == "Graphical" & input$graph1 == "Boxplot"){
         h <- ggplot(data = abalone1, aes(x= Sex, y= Rings))
-        h+ geom_boxplot(aes(color=Sex))
+        h+ geom_boxplot(aes(color=Sex))+ggtitle("# of rings by Sex")
+      } else if (input$norg == "Graphical" & input$graph1 == "Histogram"){
+        g <- ggplot(data=abalone, aes(x= !!sym(input$hisvar)))
+        g+ geom_histogram( color="red", fill="blue", ) + ggtitle("Histogram")
       }
   })
     ## outputs the numeric summary
