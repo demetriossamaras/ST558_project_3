@@ -68,7 +68,7 @@ set.seed(13)
                                  trControl = trainControl(method = "cv", 
                                                           number = 5))
 
-        predict(linear_model_1, newdata = data.frame(Length=.665,Diameter=.525))
+predict(linear_model_1, newdata = data.frame(length=.665,diameter=.525))
 ```
 
 

@@ -40,7 +40,12 @@ dashboardPage(
                 fluidPage(
                   titlePanel("About the App"), 
                   mainPanel(
-                    h4("this is where the info about the app will go. it is about using measurements of abalone to predict age")
+                    h4("The purpose of this app is to explore the 'Abalone' dataset from the UC Irvine machine learning repository. This is a dataset that takes a number of physical measurements of collected Abalone and then counts the number of rings of the shell which gives the age of the animal(# of rings+ 1.5 = age in years). Because the rings are counted by cutting the shell open, staining it, and manually counting the rings, it would be great to be able to predict age without having to count rings. For more info on this data please follow this " , tags$a("Abalone link", href= "https://archive.ics.uci.edu/dataset/1/abalone"), ". Using this app you will be able to explore summaries about differnt parts of the data, devlop and test differnt models for predicting number of rings based on your chosen predictors, give novel values for prediction, investigate/subset the entire dataset, and save that subsetted data as a csv."), 
+                    h4(" In the data exploration page you will be able to get numeric summaries about each variable in the data set and graph your desired variables of interest to explor the relationships between variables and get a sense for the dataset"), 
+                    h4("In the Supervised Learning Models page you will be able to read a breif explanation of the models avalible on the modeling info tab. In the Model Fitting tab you will be able to set the predictiors that you want to use for your models and see how effective that model is. On the Prediction tab you will be able to give novel values to set for the predictors and see what the chosen model would predict based on those values."), 
+                    h4("In the Dataset page you will be able to look at the entire dataset, subset based on you desired prefrences, and save the subsetted data of interest to a .csv"), 
+                    h4("Below is a nice picture of an Abalone enjoying not being a part of this dataset. If it does not immediatly show up please be patient as it can take a second to render"), 
+                    imageOutput("image1")
                             )
                           )
                 ), 
@@ -56,7 +61,7 @@ dashboardPage(
                       sliderInput("range", label="Desired rows",value=c(1,4176), min=1, max=4176, step=1
                                   ),
                       ## conditional panels based on summary input 
-                      conditionalPanel(condition = "input.norg == 'Numeric'",                             selectInput("var1", label = "Variable to summarize", choices = list("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
+                      conditionalPanel(condition = "input.norg == 'Numeric'",                             selectInput("var1", label = "Variable to summarize", choices = list("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" ), selected = "Rings"
                                           )
                                        ),
                       ## condition panel to choose graph
@@ -132,7 +137,7 @@ dashboardPage(
                                h4("Choose desired model for prediction"), 
                                h5("NOTE: You must have already run the models on the Model Fitting tab and the checkbox must be pressed"),
                                selectInput("modelSelect", label = "Model", choices = list("Linear model", "Tree model", "Random forest model")), 
-                               textInput("predP", label = "Input predictors used for the desired model. Must be seperated by a comma and have no spaces", value = "Length, Whole_weight"), 
+                               textInput("predP", label = "Input predictors used for the desired model. Must be seperated by a comma and have no spaces", value = "Length,Whole_weight"), 
                                textInput("predN", label= "Input values for predictors in same order. Must be seperated by a comma", value = "0.5,0.4")
                                           ), 
                              mainPanel(

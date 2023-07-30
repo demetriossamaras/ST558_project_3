@@ -25,6 +25,17 @@ colnames(abalone) <- c("Sex", "Length", "Diameter", "Height", "Whole_weight", "S
 # Define server logic required to draw a histogram
 function(input, output, session) {
   
+  
+  output$image1 <- renderImage({
+    
+    filename <- normalizePath(file.path('./www/images','Abalone-noaa.jpg'))
+    
+    list(src = filename,
+         contentType = 'image/png',
+         alt = "This is alternate text")
+    
+  }, deleteFile=FALSE )
+  
   output$select <- renderUI({
     text <-paste0("Summary of ", input$var1, " abalone data")
     h5(text)
@@ -227,12 +238,29 @@ function(input, output, session) {
         values<- unlist(strsplit(input$predN, ",")) %>% as.numeric()
         names(values)<- names
         values <- data.frame(t(values))
+      
         prediction1 <- predict(linear1(), newdata= values)
         prediction1
         
       }else if(input$check1 & input$modelSelect=="Tree model"){
+        names<- unlist(strsplit(input$predP, ",")) %>% c()
+        ## makes a values dataframe based on predictor values given
+        values<- unlist(strsplit(input$predN, ",")) %>% as.numeric()
+        names(values)<- names
+        values <- data.frame(t(values))
+        
+        prediction1 <- predict(tree1(), newdata= values)
+        prediction1
         
       }else if(input$check1 & input$modelSelect=="Random forest model"){
+        names<- unlist(strsplit(input$predP, ",")) %>% c()
+        ## makes a values dataframe based on predictor values given
+        values<- unlist(strsplit(input$predN, ",")) %>% as.numeric()
+        names(values)<- names
+        values <- data.frame(t(values))
+        
+        prediction1 <- predict(forest1(), newdata= values)
+        prediction1
         
       }
       
