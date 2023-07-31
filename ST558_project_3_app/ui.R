@@ -168,7 +168,7 @@ dashboardPage(
                                ## outputs prediction based on chosen values
                                h4("Table of desired predictor values"),
                                verbatimTextOutput("predTable"),
-                               h4("prediction output"), 
+                               h4("predicted number of rings"), 
                                verbatimTextOutput("pred1")
                                        )  
                                          )
