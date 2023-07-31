@@ -16,3 +16,4 @@ If you do not have these packages installed the following line will install all 
 install.packages(c("shiny", "tidyverse", "caret", "DT", "ggplot2", "shinydashboard", "randomForest" ))
 
 In order to run the app with the shiny::runGitHub() command run the following line:
+shiny::runGitHub(repo= "ST558_project_3", username="demetriossamaras", ref="main", subdir = "ST558_project_3_app")
