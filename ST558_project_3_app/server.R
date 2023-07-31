@@ -16,7 +16,7 @@ library(shinydashboard)
 library(tree)
 library(randomForest)
 
-
+## reads in the dataset and names te colums 
 abalone <- read.csv("abalone.data") %>% as_tibble 
 
 colnames(abalone) <- c("Sex", "Length", "Diameter", "Height", "Whole_weight", "Shucked_weight", "Viscera_weight",  "Shell_weight", "Rings" )
@@ -26,7 +26,7 @@ colnames(abalone) <- c("Sex", "Length", "Diameter", "Height", "Whole_weight", "S
 # Define server logic required to draw a histogram
 function(input, output, session) {
   
-  
+  ## creates te image and stores in output$image1
   output$image1 <- renderImage({
     
     filename <- normalizePath(file.path('./www/images','Abalone-noaa.jpg'))
@@ -45,6 +45,7 @@ function(input, output, session) {
     output$plot1 <- renderPlot({
       ##subsets rows based on selected range 
       abalone1 <- abalone[input$range[1]:input$range[2],]
+      ## creats graphs based on selected inputs 
       if(input$norg == "Graphical" & input$graph1 == "Scatterplot"){
         g <- ggplot(data=abalone1, aes(x= !!sym(input$explanvar ), y=!!sym(input$respvar )))
         g+ geom_point(aes(color= Sex)) + geom_smooth(method = "lm") + ggtitle("Scatterplot")
@@ -91,7 +92,7 @@ function(input, output, session) {
       }
       
   })
-    
+    ## renders rmse train
     output$lmRMSE <- renderPrint({
       if(input$check1){
         lmModel <-linear1()
@@ -99,14 +100,14 @@ function(input, output, session) {
       }
       
     })
-    
+    ## renders summary train
     output$multiL2 <- renderPrint({
       if(input$check1){
         summary(linear1())
       }
       
     })
-    
+    ## tests on test set renders result 
     output$multiL3 <- renderPrint({
       if(input$check1){
         set.seed(13) 
@@ -126,7 +127,7 @@ function(input, output, session) {
       linear_1_RMSE
       }
     })
-    
+    ## creates tree model
     tree1<- reactive({
       if(input$check1){
         set.seed(13) 
@@ -180,7 +181,7 @@ function(input, output, session) {
       tree_1_RMSE 
       }
     })
-    
+    ## creates random forrest model
     forest1 <- reactive({
       if(input$check1){
         set.seed(13) 
@@ -233,7 +234,20 @@ function(input, output, session) {
         rf_1_RMSE
      }
     })
-    ## makes prediction based on inputted values 
+    ## shoes the table of novel predictors selected 
+    output$predTable <- renderPrint({
+      if(input$check1){
+        ## makes a names vector based on predictors input
+        names<- unlist(strsplit(input$predP, ",")) %>% c()
+        ## makes a values dataframe based on predictor values given
+        values<- unlist(strsplit(input$predN, ",")) %>% as.numeric()
+        names(values)<- names
+        values <- data.frame(t(values))
+        values 
+      }
+      
+    })
+    ## makes prediction based on inputted values and model selected
     output$pred1 <- renderPrint({
       if(input$check1 & input$modelSelect=="Linear model"){
         ## makes a names vector based on predictors input
