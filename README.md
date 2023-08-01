@@ -13,7 +13,7 @@ library(tree)
 library(randomForest)
 
 If you do not have these packages installed the following line will install all packages needed:
-install.packages(c("shiny", "tidyverse", "caret", "DT", "ggplot2", "shinydashboard", "randomForest" ))
+install.packages(c("shiny", "tidyverse", "caret", "DT", "ggplot2", "shinydashboard", "tree", "randomForest" ))
 
 In order to run the app with the shiny::runGitHub() command run the following line:
 shiny::runGitHub(repo= "ST558_project_3", username="demetriossamaras", ref="main", subdir = "ST558_project_3_app")
